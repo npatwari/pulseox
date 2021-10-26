@@ -113,6 +113,30 @@ for i, threshold in enumerate(threshold_list):
     plt.text(p_FA_b[i], p_CD_b[i], str(threshold), horizontalalignment='left')
     plt.plot([p_FA_b[i],p_FA_w[i]], [p_CD_b[i],p_CD_w[i]], 'b-', linewidth=2)
 ```
+In Matlab, the same plot is generated using:
+```
+% Plot the results
+figure(1)
+plot(p_FA_w, p_CD_w, 'rs', p_FA_b, p_CD_b, 'ko', p_FA_all, p_CD_all, 'g.', ...
+    'LineWidth',2, 'MarkerSize',10)
+set(gca, 'FontSize', 16)
+set(gca,'xlim',[-0.05, 1.05])
+set(gca,'ylim',[-0.05, 1.05])
+grid('on')
+xlabel('Probability of False Alarm')
+ylabel('Probability of Correct Detection')
+hold on;
+for i=1:length(threshold_list)
+    % Put the threshold_list(i) on each dot, connect the white/Black points for 
+    % that correspond to the same threshold_list(i).
+    text(p_FA_w(i)-0.01, p_CD_w(i), num2str(threshold_list(i),'%.1f'), ...
+        'HorizontalAlignment', 'right', 'FontSize', 14);
+    text(p_FA_b(i)+0.01, p_CD_b(i), num2str(threshold_list(i),'%.1f'), ...
+        'HorizontalAlignment', 'left', 'FontSize', 14);
+    plot([p_FA_b(i),p_FA_w(i)], [p_CD_b(i),p_CD_w(i)], 'b-', 'LineWidth',2);
+end
+legend('White', 'Black', 'All','Location','southeast','FontSize',16)
+```
 
 3b) **Answer This**: From this data, what would be the best threshold to minimize:
 1. the sum of the two probabilities of error (Prob[ False Alarm ] + Prob[ False Negative]), if considering all patients together?
