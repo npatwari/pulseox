@@ -20,9 +20,9 @@ The data and some introductory code is at: 
 
 https://github.com/npatwari/pulseox
 
-Code This: Use numpy's `loadtxt()` command to load the two CSV files. Separate out the pulse oximeter data (in column 0), and the arterial oxygen saturation data (in column 1).
+**Code This**: Use numpy's `loadtxt()` command (or Matlab's `csvread()`) to load the two CSV files. Separate out the pulse oximeter data in column 0 (note my column numbering starts at 0, if you use Matlab you start at 1), and the arterial oxygen saturation data in column 1.
 
-My function `plotPulseOxData.py` contains the python code to do this (and a little more).
+My scripts `plotPulseOxData.py` and `plotPulseOxData.m` contain the python / Matlab code to do this (and a little more).
 
 The 0th column is the pulse ox value:
 - This is what we are directly studying.  We are considering an application in which we only have pulse ox values and need to detect hypoxemia.  (In this data set, we also have a arterial oxygen saturation, but this is only to be used for our assignment as a ground truth.)
@@ -92,7 +92,7 @@ Engineers use what is called a "receiver operating characteristic" (ROC) curve t
 
 3a) **Code and Answer This**: Plot each (probability of false alarm, probability of detection) pair as a point on a figure.  Label them by race, and with the threshold.  Turn in the plot.
 
-You can use my code to plot the values.
+You can use my python code to plot the values.
 ```
 # Plot the results
 plt.figure(1)
@@ -115,7 +115,7 @@ for i, threshold in enumerate(threshold_list):
 ```
 
 3b) **Answer This**: From this data, what would be the best threshold to minimize:
-1.  the sum of the two probabilities of error (Prob[ False Alarm ] + Prob[ False Negative]), if considering all patients together?
+1. the sum of the two probabilities of error (Prob[ False Alarm ] + Prob[ False Negative]), if considering all patients together?
 2. the sum of the two probabilities of error, if considering only white patients?
 3. the sum of the two probabilities of error, if considering only Black patients?
 
