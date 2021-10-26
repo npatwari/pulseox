@@ -2,7 +2,7 @@ Assignment design: Neal Patwari, Oct. 2021
 
 ## Summary
 
-Your goal for this assignment is to study the racial bias of pulse oximetry from a data set. Your data set was created to match the statistics of the [Sjoding 2020] measurements, as described in Figure 1 of their paper.  Your goal is to study the measurement bias as a function of race, and to see the impact that it has for the detection of hypoxemia.  We will study "race blind" use of pulse oximeter measurements, as well as "race corrected" measurements, for hypoxemia detection.  The description you need to understand my questions are in normal text, while the specific things I want you to implement are in bold, noted with a "Code This:" tag. Questions to answer in your write-up are denoted by an "Answer This:" tag.
+Your goal for this assignment is to study the racial bias of pulse oximetry from a data set. Your data set was created to match the statistics of the [Sjoding 2020](https://www.nejm.org/doi/full/10.1056/NEJMc2029240) measurements, as described in Figure 1 of their paper.  Your goal is to study the measurement bias as a function of race, and to see the impact that it has for the detection of hypoxemia.  We will study "race blind" use of pulse oximeter measurements, as well as "race corrected" measurements, for hypoxemia detection.  The description you need to understand my questions are in normal text, while the specific things I want you to implement are in bold, noted with a "Code This:" tag. Questions to answer in your write-up are denoted by an "Answer This:" tag.
 
 ## Submission
 
@@ -31,7 +31,7 @@ The 1st column is the arterial oxygen saturation:
 - We take the arterial Ox Sat as the "truth" because it is the medical "gold standard" for monitoring of oxygen saturation in the blood.
 
 Each row is one patient:  
-- The two measurements were taken within 10 minutes of each other, so the authors consider them to be comparable [Sjoding 2020].
+- The two measurements were taken within 10 minutes of each other, so the authors consider them to be comparable [Sjoding 2020](https://www.nejm.org/doi/full/10.1056/NEJMc2029240).
  
 Our two hypotheses are H0 and H1:
 - H0: the "normal" case in which the patient does not have hypoxemia    
@@ -156,4 +156,6 @@ You should see now that, even when using a race-based correction factor, the per
 
 5) **Answer This**: In 1-2 sentences, if the statistical bias in the pulse ox value as a function of race is not the problem when the detector is corrected for race, what do you think is the problem that causes the hypoxemia detector to perform worse for Black patients?  Brainstorming is ok for this -- I don't expect you to analyze the data to justify your ideas, and it will not be graded for correctness (only as answered/unanswered).
 
+## Reference
 
+Sjoding, Michael W., Robert P. Dickson, Theodore J. Iwashyna, Steven E. Gay, and Thomas S. Valley. [Racial bias in pulse oximetry measurement.](https://www.nejm.org/doi/full/10.1056/NEJMc2029240)  New England Journal of Medicine 383, no. 25 (2020): 2477-2478.
