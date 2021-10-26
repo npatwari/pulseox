@@ -10,7 +10,7 @@ You should submit both your code and your write-up. While you can discuss proble
 
 ## A disclaimer
 
-I generated this data to match the box plots shown in Figure 1.  This is not the real data from the two data sets used by the authors, which is unavailable to me.  Instead, I generated pairs of (pulse ox, arterial oxygen saturation) data that matches the characteristics of the data reported in the box plots in Figure 1.  You can access my code for generating fake (but matching the data in the figure) in the github project mentioned below if you want to know more. It uses a metalog distribution to ensure that the median, 25th percentile, and 75th percentile of the generated arterial oxygen saturation measurements match those in the plots.  They aren't, though, the original data, and so your results have this caveat.
+I generated this data to match the box plots shown in Figure 1.  This is not the real data from the two data sets used by the authors, which is unavailable to me.  Instead, I generated pairs of (pulse ox, arterial oxygen saturation) data that matches the characteristics of the data reported in the box plots in Figure 1, using the python [metalogistic library](https://github.com/tadamcz/metalogistic).  You can access my code for generating fake (but matching the data in the figure) in the github project mentioned below if you want to know more. It uses a metalog distribution to ensure that the median, 25th percentile, and 75th percentile of the generated arterial oxygen saturation measurements match those in the plots.  They aren't, though, the original data, and so your results have this caveat.
 
 ## Assignment Tasks and Instructions:
 
