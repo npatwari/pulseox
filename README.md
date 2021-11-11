@@ -67,15 +67,15 @@ The two types of incorrect decisions might lead to different negative outcomes. 
 - A false alarm could lead someone to go to the ER, which could be costly and take their time, when they didn't really need the intensive medical care to survive the virus.
 - A false negative would keep them at home at a time when they might need supplemental oxygen or other treatment to survive the virus, and thus would increase their risk of death.
 
-**Code This:** For a threshold of 91.5, calculate the probability of false alarm, and probability of correct detection when using a pulse ox value to detect hypoxemia.  Do this separately for Black and white patients. Finally, calculate the probability of false alarm, and probability of detection over ALL patients. (This is not the average of the Black and white values because there are a different number of measurements for Black patients and white patients).  
+**Code This:** For a pulse ox threshold of 91.5, calculate the probability of false alarm, and probability of correct detection when using a pulse ox value to detect hypoxemia.  Remember that hypoxemia is defined as the arterial oxygen saturation being less than 88.0, regardless of what threshold your system uses for the pulse ox value.  Do this separately for Black and white patients. Finally, calculate the probability of false alarm, and probability of detection over ALL patients. (This is not the average of the Black and white values because there are a different number of measurements for Black patients and white patients).  
 
 2) **Answer This:** Turn in the six probability values (probability of false alarm and probability of correct detection; for Black, white, and all patients).
 
 ### 3. Calculate and plot the results for all possible thresholds.
 
-You might be saying, the performance metrics are a function of the threshold.  As you move the threshold, one type of error increases while the other decreases. Our motivating question for this section is, what should the threshold be?
+You might be saying, the performance metrics are a function of the pulse ox threshold.  As you move the threshold, one type of error increases while the other decreases. Our motivating question for this section is, what should the pulse ox threshold be?
 
-There are only integer values from the pulse oximeters, and the data we are given includes only values 89 to 96.  So there are only 8 thresholds that would give us different results.  So let's study the range from 88.5 to 96.5 with step size 1.0.  
+There are only integer values from the pulse oximeters, and the data we are given includes only values 89 to 96.  So there are only 9 thresholds that would give us different results.  So let's study the range from 88.5 to 96.5 with step size 1.0.  
 
 **Code This:** For each threshold, calculate the six probabilities you did in part 2.  Put them in six numpy arrays.  For your reference, in my code I called them:
 
