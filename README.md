@@ -2,7 +2,7 @@ Assignment design: Neal Patwari, Oct. 2021
 
 ## Summary
 
-Your goal for this assignment is to study the racial bias of pulse oximetry from a data set. Your data set was created to match the statistics of the [Sjoding 2020] measurements, as described in Figure 1 of their paper.  Your goal is to study the measurement bias as a function of race, and to see the impact that it has for the detection of hypoxemia.  We will study "race blind" use of pulse oximeter measurements, as well as "race corrected" measurements, for hypoxemia detection.  The description you need to understand my questions are in normal text, while the specific things I want you to implement are in bold, noted with a "Code This:" tag. Questions to answer in your write-up are denoted by an "Answer This:" tag.
+Your goal for this assignment is to study the racial bias of pulse oximetry from a data set. Your data set was created to match the statistics of the [Sjoding 2020](https://www.nejm.org/doi/full/10.1056/NEJMc2029240) measurements, as described in Figure 1 of their paper.  Your goal is to study the measurement bias as a function of race, and to see the impact that it has for the detection of hypoxemia.  We will study "race blind" use of pulse oximeter measurements, as well as "race corrected" measurements, for hypoxemia detection.  The description you need to understand my questions are in normal text, while the specific things I want you to implement are in bold, noted with a "Code This:" tag. Questions to answer in your write-up are denoted by an "Answer This:" tag.
 
 ## Submission
 
@@ -10,7 +10,7 @@ You should submit both your code and your write-up. While you can discuss proble
 
 ## A disclaimer
 
-I generated this data to match the box plots shown in Figure 1.  This is not the real data from the two data sets used by the authors, which is unavailable to me.  Instead, I generated pairs of (pulse ox, arterial oxygen saturation) data that matches the characteristics of the data reported in the box plots in Figure 1.  You can access my code for generating fake (but matching the data in the figure) in the github project mentioned below if you want to know more. It uses a metalog distribution to ensure that the median, 25th percentile, and 75th percentile of the generated arterial oxygen saturation measurements match those in the plots.  They aren't, though, the original data, and so your results have this caveat.
+I generated this data to match the box plots shown in Figure 1.  This is not the real data from the two data sets used by the authors, which is unavailable to me.  Instead, I generated pairs of (pulse ox, arterial oxygen saturation) data that matches the characteristics of the data reported in the box plots in Figure 1, using the python [metalogistic library](https://github.com/tadamcz/metalogistic).  You can access my code for generating fake (but matching the data in the figure) in the github project mentioned below if you want to know more. It uses a metalog distribution to ensure that the median, 25th percentile, and 75th percentile of the generated arterial oxygen saturation measurements match those in the plots.  They aren't, though, the original data, and so your results have this caveat.
 
 ## Assignment Tasks and Instructions:
 
@@ -20,9 +20,9 @@ The data and some introductory code is at: 
 
 https://github.com/npatwari/pulseox
 
-Code This: Use numpy's `loadtxt()` command to load the two CSV files. Separate out the pulse oximeter data (in column 0), and the arterial oxygen saturation data (in column 1).
+**Code This**: Use numpy's `loadtxt()` command (or Matlab's `csvread()`) to load the two CSV files. Separate out the pulse oximeter data in column 0 (note my column numbering starts at 0, if you use Matlab you start at 1), and the arterial oxygen saturation data in column 1.
 
-My function `plotPulseOxData.py` contains the python code to do this (and a little more).
+My scripts `plotPulseOxData.py` and `plotPulseOxData.m` contain the python / Matlab code to do this (and a little more).
 
 The 0th column is the pulse ox value:
 - This is what we are directly studying.  We are considering an application in which we only have pulse ox values and need to detect hypoxemia.  (In this data set, we also have a arterial oxygen saturation, but this is only to be used for our assignment as a ground truth.)
@@ -31,7 +31,7 @@ The 1st column is the arterial oxygen saturation:
 - We take the arterial Ox Sat as the "truth" because it is the medical "gold standard" for monitoring of oxygen saturation in the blood.
 
 Each row is one patient:  
-- The two measurements were taken within 10 minutes of each other, so the authors consider them to be comparable [Sjoding 2020].
+- The two measurements were taken within 10 minutes of each other, so the authors consider them to be comparable [Sjoding 2020](https://www.nejm.org/doi/full/10.1056/NEJMc2029240).
  
 Our two hypotheses are H0 and H1:
 - H0: the "normal" case in which the patient does not have hypoxemia    
@@ -67,15 +67,15 @@ The two types of incorrect decisions might lead to different negative outcomes. 
 - A false alarm could lead someone to go to the ER, which could be costly and take their time, when they didn't really need the intensive medical care to survive the virus.
 - A false negative would keep them at home at a time when they might need supplemental oxygen or other treatment to survive the virus, and thus would increase their risk of death.
 
-**Code This:** For a threshold of 91.5, calculate the probability of false alarm, and probability of correct detection when using a pulse ox value to detect hypoxemia.  Do this separately for Black and white patients. Finally, calculate the probability of false alarm, and probability of detection over ALL patients. (This is not the average of the Black and white values because there are a different number of measurements for Black patients and white patients).  
+**Code This:** For a pulse ox threshold of 91.5, calculate the probability of false alarm, and probability of correct detection when using a pulse ox value to detect hypoxemia.  Remember that hypoxemia is defined as the arterial oxygen saturation being less than 88.0, regardless of what threshold your system uses for the pulse ox value.  Do this separately for Black and white patients. Finally, calculate the probability of false alarm, and probability of detection over ALL patients. (This is not the average of the Black and white values because there are a different number of measurements for Black patients and white patients).  
 
 2) **Answer This:** Turn in the six probability values (probability of false alarm and probability of correct detection; for Black, white, and all patients).
 
 ### 3. Calculate and plot the results for all possible thresholds.
 
-You might be saying, the performance metrics are a function of the threshold.  As you move the threshold, one type of error increases while the other decreases. Our motivating question for this section is, what should the threshold be?
+You might be saying, the performance metrics are a function of the pulse ox threshold.  As you move the threshold, one type of error increases while the other decreases. Our motivating question for this section is, what should the pulse ox threshold be?
 
-There are only integer values from the pulse oximeters, and the data we are given includes only values 89 to 96.  So there are only 8 thresholds that would give us different results.  So let's study the range from 88.5 to 96.5 with step size 1.0.  
+There are only integer values from the pulse oximeters, and the data we are given includes only values 89 to 96.  So there are only 9 thresholds that would give us different results.  So let's study the range from 88.5 to 96.5 with step size 1.0.  
 
 **Code This:** For each threshold, calculate the six probabilities you did in part 2.  Put them in six numpy arrays.  For your reference, in my code I called them:
 
@@ -92,7 +92,7 @@ Engineers use what is called a "receiver operating characteristic" (ROC) curve t
 
 3a) **Code and Answer This**: Plot each (probability of false alarm, probability of detection) pair as a point on a figure.  Label them by race, and with the threshold.  Turn in the plot.
 
-You can use my code to plot the values.
+You can use my python code to plot the values.
 ```
 # Plot the results
 plt.figure(1)
@@ -113,9 +113,33 @@ for i, threshold in enumerate(threshold_list):
     plt.text(p_FA_b[i], p_CD_b[i], str(threshold), horizontalalignment='left')
     plt.plot([p_FA_b[i],p_FA_w[i]], [p_CD_b[i],p_CD_w[i]], 'b-', linewidth=2)
 ```
+In Matlab, the same plot is generated using:
+```
+% Plot the results
+figure(1)
+plot(p_FA_w, p_CD_w, 'rs', p_FA_b, p_CD_b, 'ko', p_FA_all, p_CD_all, 'g.', ...
+    'LineWidth',2, 'MarkerSize',10)
+set(gca, 'FontSize', 16)
+set(gca,'xlim',[-0.05, 1.05])
+set(gca,'ylim',[-0.05, 1.05])
+grid('on')
+xlabel('Probability of False Alarm')
+ylabel('Probability of Correct Detection')
+hold on;
+for i=1:length(threshold_list)
+    % Put the threshold_list(i) on each dot, connect the white/Black points for 
+    % that correspond to the same threshold_list(i).
+    text(p_FA_w(i)-0.01, p_CD_w(i), num2str(threshold_list(i),'%.1f'), ...
+        'HorizontalAlignment', 'right', 'FontSize', 14);
+    text(p_FA_b(i)+0.01, p_CD_b(i), num2str(threshold_list(i),'%.1f'), ...
+        'HorizontalAlignment', 'left', 'FontSize', 14);
+    plot([p_FA_b(i),p_FA_w(i)], [p_CD_b(i),p_CD_w(i)], 'b-', 'LineWidth',2);
+end
+legend('White', 'Black', 'All','Location','southeast','FontSize',16)
+```
 
 3b) **Answer This**: From this data, what would be the best threshold to minimize:
-1.  the sum of the two probabilities of error (Prob[ False Alarm ] + Prob[ False Negative]), if considering all patients together?
+1. the sum of the two probabilities of error (Prob[ False Alarm ] + Prob[ False Negative]), if considering all patients together?
 2. the sum of the two probabilities of error, if considering only white patients?
 3. the sum of the two probabilities of error, if considering only Black patients?
 
@@ -132,4 +156,6 @@ You should see now that, even when using a race-based correction factor, the per
 
 5) **Answer This**: In 1-2 sentences, if the statistical bias in the pulse ox value as a function of race is not the problem when the detector is corrected for race, what do you think is the problem that causes the hypoxemia detector to perform worse for Black patients?  Brainstorming is ok for this -- I don't expect you to analyze the data to justify your ideas, and it will not be graded for correctness (only as answered/unanswered).
 
+## Reference
 
+Sjoding, Michael W., Robert P. Dickson, Theodore J. Iwashyna, Steven E. Gay, and Thomas S. Valley. [Racial bias in pulse oximetry measurement.](https://www.nejm.org/doi/full/10.1056/NEJMc2029240)  New England Journal of Medicine 383, no. 25 (2020): 2477-2478.
