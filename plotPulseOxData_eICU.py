@@ -34,18 +34,18 @@ plt.ion()
 
 # Load data: There are two files separated by race.
 # I use _w and _b for the white and Black patient data, respectively
-data_w = np.loadtxt("eICU data 17 Dec/white.csv", delimiter=',', comments='#')
-data_b = np.loadtxt("eICU data 17 Dec/black.csv", delimiter=',', comments='#')
+data_w = np.loadtxt("temp/white_5.csv", delimiter=',', comments='#')
+data_b = np.loadtxt("temp/black_5.csv", delimiter=',', comments='#')
 
 # The 1st column is the pulse ox value.
 # The 0th column is the arterial oxygen saturation.  
 #   We take the arterial Onp.where(sorted_x0 > sorted_x1[i])[0]x Sat as the "truth" because it is the "gold standard"
 #   for monitoring of oxygen saturation in the blood.
 # Each row is one patient.  
-pulseOx_w = data_w[:,1]
-arterOx_w = data_w[:,0]
-pulseOx_b = data_b[:,1]
-arterOx_b = data_b[:,0]
+pulseOx_w = data_w[:,2]
+arterOx_w = data_w[:,1]
+pulseOx_b = data_b[:,2]
+arterOx_b = data_b[:,1]
 
 # Plot the data
 plt.figure(1)
