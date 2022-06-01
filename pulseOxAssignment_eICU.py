@@ -17,6 +17,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+from matplotlib.ticker import MultipleLocator
+
 
 matplotlib.rc('xtick', labelsize=16) 
 matplotlib.rc('ytick', labelsize=16) 
@@ -103,42 +105,68 @@ def computeROC(x_0, x_1, plotOption=True):
 #     Arterial Oxygen Saturation is < 88.0
 
 # Load data
-data_w = np.loadtxt("data/white_20.csv", delimiter=',', comments='#')
-data_b = np.loadtxt("data/black_20.csv", delimiter=',', comments='#')
+data_w = np.loadtxt("./Data 4-22/white_10.csv", delimiter=',', comments='%')
+data_b = np.loadtxt("./Data 4-22/black_10.csv", delimiter=',', comments='%')
+data_a = np.loadtxt("./Data 4-22/asian_10.csv", delimiter=',', comments='%')
+data_h = np.loadtxt("./Data 4-22/hispanic_10.csv", delimiter=',', comments='%')
+data_n = np.loadtxt("./Data 4-22/native_american_10.csv", delimiter=',', comments='%')
 
-# The 0th column is the pulse ox value, the 1st column is the arterial oxygen
-# saturation.  Each row is one patient.
+# The 1st column is the pulse ox value.
+# The 0th column is the arterial oxygen saturation.  
+#   We take the arterial Onp.where(sorted_x0 > sorted_x1[i])[0]x Sat as the "truth" because it is the "gold standard"
+#   for monitoring of oxygen saturation in the blood.
+# Each row is one patient.  
 pulseOx_w = data_w[:,2]
 arterOx_w = data_w[:,1]
 pulseOx_b = data_b[:,2]
 arterOx_b = data_b[:,1]
+pulseOx_a = data_a[:,2]
+arterOx_a = data_a[:,1]
+pulseOx_h = data_h[:,2]
+arterOx_h = data_h[:,1]
+pulseOx_n = data_n[:,2]
+arterOx_n = data_n[:,1]
+pulseOx_all = np.concatenate((pulseOx_w, pulseOx_b, pulseOx_a, pulseOx_h, pulseOx_n))
+arterOx_all = np.concatenate((arterOx_w, arterOx_b, arterOx_a, arterOx_h, arterOx_n))
 
 # Find all pulseOx values for which H0 is genuinely true, ie, arterOx >= 88
 temp      = np.where(arterOx_b >= 88.0)[0]
 pulseOx_b_H0 = pulseOx_b[temp]
+temp      = np.where(arterOx_a >= 88.0)[0]
+pulseOx_a_H0 = pulseOx_a[temp]
 temp      = np.where(arterOx_w >= 88.0)[0]
 pulseOx_w_H0 = pulseOx_w[temp]
+temp      = np.where(arterOx_all >= 88.0)[0]
+pulseOx_all_H0 = pulseOx_all[temp]
 
 # Find all pulseOx values for which H1 is genuinely true, ie, arterOx < 88
 temp      = np.where(arterOx_b < 88.0)[0]
 pulseOx_b_H1 = pulseOx_b[temp]
+temp      = np.where(arterOx_a < 88.0)[0]
+pulseOx_a_H1 = pulseOx_a[temp]
 temp      = np.where(arterOx_w < 88.0)[0]
 pulseOx_w_H1 = pulseOx_w[temp]
+temp      = np.where(arterOx_all < 88.0)[0]
+pulseOx_all_H1 = pulseOx_all[temp]
 
 # What is the probability of hypoxemia?
 print("P[hypoxemia | Black] = " + str( len(pulseOx_b_H1) *1.0 / len(pulseOx_b)))
+print("P[hypoxemia | Asian] = " + str( len(pulseOx_a_H1) *1.0 / len(pulseOx_a)))
 print("P[hypoxemia | White] = " + str( len(pulseOx_w_H1) *1.0 / len(pulseOx_w)))
+print("P[hypoxemia] = " + str( len(pulseOx_all_H1) *1.0 / len(pulseOx_all)))
 
 # 1. What if a single pulseOx threshold must be used for all patients?
 #
 # There are only integer pulseox values, so use 88.5, 89.5, ..., 96.5 
 # as possible thresholds.  Initialize the vectors (for false alarm and detection,
 # for white and Black patients).
-threshold_list = np.arange(85.5, 99.5, 1.0)
+threshold_list = np.concatenate((np.array([60.5, 70.5, 76.5, 80.5, 82.5]), np.arange(84.5, 99.5, 1.0)))
 p_FA_b    = np.zeros(len(threshold_list))
+p_FA_a    = np.zeros(len(threshold_list))
 p_FA_w    = np.zeros(len(threshold_list))
 p_FA_all  = np.zeros(len(threshold_list))
 p_D_b     = np.zeros(len(threshold_list))
+p_D_a     = np.zeros(len(threshold_list))
 p_D_w     = np.zeros(len(threshold_list))
 p_D_all   = np.zeros(len(threshold_list))
 for i, threshold in enumerate(threshold_list):
@@ -146,15 +174,15 @@ for i, threshold in enumerate(threshold_list):
     # For each threshold, calculate the probability of false alarm, ie., 
     # the probability of raising the alarm when H0 is true 
 	p_FA_b[i] = float(np.count_nonzero(pulseOx_b_H0 < threshold)) / len(pulseOx_b_H0)
+	p_FA_a[i] = float(np.count_nonzero(pulseOx_a_H0 < threshold)) / len(pulseOx_a_H0)
 	p_FA_w[i] = float(np.count_nonzero(pulseOx_w_H0 < threshold)) / len(pulseOx_w_H0)
-	p_FA_all[i] = float(np.count_nonzero(pulseOx_w_H0 < threshold) + 
-		np.count_nonzero(pulseOx_b_H0 < threshold)) / (len(pulseOx_w_H0) + len(pulseOx_b_H0))
+	p_FA_all[i] = float(np.count_nonzero(pulseOx_all_H0 < threshold)) / len(pulseOx_all_H0)
     # For each threshold, calculate the probability of correct detection, ie., 
     # the probability of raising the alarm when H1 is true 
 	p_D_b[i]  = float(np.count_nonzero(pulseOx_b_H1 < threshold)) / len(pulseOx_b_H1)
+	p_D_a[i]  = float(np.count_nonzero(pulseOx_a_H1 < threshold)) / len(pulseOx_a_H1)
 	p_D_w[i]  = float(np.count_nonzero(pulseOx_w_H1 < threshold)) / len(pulseOx_w_H1)
-	p_D_all[i] = float(np.count_nonzero(pulseOx_w_H1 < threshold) + 
-		np.count_nonzero(pulseOx_b_H1 < threshold)) / (len(pulseOx_w_H1) + len(pulseOx_b_H1))
+	p_D_all[i] = float(np.count_nonzero(pulseOx_all_H1 < threshold)) / len(pulseOx_all_H1)
 
 # Sum of FA probability and MD probability
 p_TOT_b = p_FA_b - p_D_b + 1.0 
@@ -173,24 +201,32 @@ print("All    | " + "{:1.4f}".format(p_FA_all[3]) + " | " + "{:1.4f}".format(p_D
 
 # Plot the results
 plt.figure(1)
-plt.plot(p_FA_w, p_D_w, 'rs', label="White", linewidth=2)
-plt.plot(p_FA_all, p_D_all, 'g.', label="All", linewidth=2)
-plt.plot(p_FA_b, p_D_b, 'ko', label="Black", linewidth=2)
-plt.grid('on')
-plt.xlabel('Probability of False Alarm', fontsize=16)
-plt.ylabel('Probability of Correct Detection', fontsize=16)
-plt.xticks(np.arange(0, 0.71, 0.05)) 
-plt.yticks(np.arange(0, 0.71, 0.1))
-plt.legend(fontsize=16,loc="southeast")
 for i, threshold in enumerate(threshold_list):
-
 	# Put the threshold on each dot, connect the white/Black points for 
 	# that correspond to the same threshold.
-	plt.text(p_FA_w[i]-0.0035, p_D_w[i], str(threshold), horizontalalignment='right')
-	plt.text(p_FA_b[i]+0.004, p_D_b[i]-0.015, str(threshold), horizontalalignment='left')
-	plt.plot([p_FA_b[i],p_FA_w[i]], [p_D_b[i],p_D_w[i]], 'b-', linewidth=2)
+	if threshold < 95:
+		plt.text(p_FA_w[i]-0.0035, p_D_w[i], str(threshold), horizontalalignment='right')
+	if threshold < 96:
+		plt.text(p_FA_a[i]+0.004, p_D_a[i]-0.015, str(threshold), horizontalalignment='left')
+	plt.plot([p_FA_a[i],p_FA_w[i]], [p_D_a[i],p_D_w[i]], 'b-', linewidth=2)
 
-plt.xlim([-0.01, 0.21])
+plt.plot(p_FA_w, p_D_w, marker="D", markeredgecolor='k', \
+    markerfacecolor='red', label="White", linewidth=0)
+plt.plot(p_FA_a, p_D_a, 'ko', marker="X", markeredgecolor='k', \
+    markerfacecolor='blue', label="Asian", linewidth=0)
+plt.grid('on', which='both')
+# put in minor grid lines
+for x in np.arange(0.02, 0.70, 0.04):
+	plt.plot([x, x], [-0.01, 1], 'k',linewidth=0.25)
+for y in np.arange(0.05, 1.0, 0.1):
+	plt.plot([-0.13,1], [y, y], 'k',linewidth=0.25)
+plt.xlabel('Prob. of False Alarm / Type I Error', fontsize=16)
+plt.ylabel('Prob. of Detection / True Positive', fontsize=16)
+plt.xticks(np.arange(0, 0.71, 0.04)) 
+plt.yticks(np.arange(0, 0.71, 0.1))
+plt.legend(fontsize=14,loc="lower right")
+
+plt.xlim([-0.013, 0.21])
 plt.ylim([-0.01, 0.71])
 
 
