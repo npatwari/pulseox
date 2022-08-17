@@ -1,4 +1,23 @@
-Assignment design: Neal Patwari, Oct. 2021
+Assignment design: 
+ v0: Neal Patwari, Oct. 2021
+ v1: Neal Patwari, Aug. 2022
+
+## Purpose
+
+This assignment connects to the following course learning objectives:
+ - Understand that sensors, and decision systems that use its data, can be biased, unequal, and inequitable by group.
+ - Be able to describe and quantify bias; and to perform sensor bias correction and understand its limitations.
+
+### Skills
+You will get practice applying data analysis skills to the context of quantifying sensor inequity.  While we have read about and discussed bias in algorithms and engineered systems, this assignment will have you handle and visualize sensor data to show its biases.  You will need to analyze the sensor data to show what the results of a bias-reduction strategy would have been, and discuss its limitations.
+
+### Knowledge
+
+This assignment will help you become familiar with the following content knowledge in computer science, and electrical engineering
+1. Statistical bias: The difference between the expected value of the sensor and the true value of the parameter
+2. Variance and standard deviation of a sensor or estimator
+3. Discriminatory bias: How a sensor performs differently as a function of a person's membership in an oppressed group.
+4. Classifier performance statistics: Such as the false alarm (Type I error) rate, missed detection (Type II error) rate, and others.  
 
 ## Summary
 
